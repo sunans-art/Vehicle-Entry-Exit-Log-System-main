@@ -435,45 +435,79 @@ function stopQRScan() {
 }
 
 
-async function startQRScan() {
+function startQRScan() {
+  // แสดงหน้าขออนุญาตกล้องก่อน
   navigateToScreen("scan");
 
-  const video = document.getElementById("qr-video");
+  // reset UI
+  const permBox  = document.getElementById("camera-permission-box");
+  const camBox   = document.getElementById("camera-view-box");
+  const errMsg   = document.getElementById("camera-error-msg");
 
-  scanStream = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: "environment" }
-  });
+  if (permBox) permBox.style.display = "block";
+  if (camBox)  camBox.style.display  = "none";
+  if (errMsg)  errMsg.style.display  = "none";
+}
 
-  video.srcObject = scanStream;
-  video.setAttribute("playsinline", true);
-  video.play();
+async function requestCameraPermission() {
+  const permBox  = document.getElementById("camera-permission-box");
+  const camBox   = document.getElementById("camera-view-box");
+  const errMsg   = document.getElementById("camera-error-msg");
+  const allowBtn = document.getElementById("allow-camera-btn");
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  function scanLoop() {
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, canvas.width, canvas.height);
-
-      if (code) {
-        stopQRScan();
-
-        scannedCarNumber = code.data;
-
-        // 👉 เปิดฟอร์ม inspection พร้อมกรอก car number
-        openInspectionWithCarNumber(scannedCarNumber);
-        return;
-      }
-    }
-    requestAnimationFrame(scanLoop);
+  // แสดง Loading บนปุ่ม
+  if (allowBtn) {
+    allowBtn.disabled = true;
+    allowBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp;กำลังเปิดกล้อง...';
   }
 
-  scanLoop();
+  try {
+    const video = document.getElementById("qr-video");
+
+    scanStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }
+    });
+
+    // สำเร็จ — ซ่อน permission box แสดง camera
+    if (permBox) permBox.style.display = "none";
+    if (camBox)  camBox.style.display  = "block";
+
+    video.srcObject = scanStream;
+    video.setAttribute("playsinline", true);
+    video.play();
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    function scanLoop() {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+        if (code) {
+          stopQRScan();
+          scannedCarNumber = code.data;
+          openInspectionWithCarNumber(scannedCarNumber);
+          return;
+        }
+      }
+      requestAnimationFrame(scanLoop);
+    }
+
+    scanLoop();
+
+  } catch (err) {
+    // ไม่อนุญาต — แสดง error
+    if (errMsg) errMsg.style.display = "block";
+    if (allowBtn) {
+      allowBtn.disabled = false;
+      allowBtn.innerHTML = '<i class="fa-solid fa-camera"></i>&nbsp;ลองอีกครั้ง';
+    }
+  }
 }
 
 
