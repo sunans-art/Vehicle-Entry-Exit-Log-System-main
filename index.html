@@ -491,18 +491,51 @@
         &nbsp;อนุญาตและเริ่มสแกน
       </button>
 
-      <p id="camera-error-msg" style="
+      <div id="camera-error-msg" style="
         display:none;
         margin-top:16px;
-        color:#dc2626;
-        font-size:13px;
-        background:#fef2f2;
-        padding:10px 14px;
-        border-radius:10px;
+        text-align:center;
       ">
-        ❌ ไม่สามารถเข้าถึงกล้องได้<br>
-        กรุณาไปที่ <b>การตั้งค่า Browser → อนุญาตกล้อง</b> แล้วลองใหม่
-      </p>
+        <div style="
+          background:#fef2f2;
+          border:1px solid #fecaca;
+          border-radius:14px;
+          padding:16px;
+          margin-bottom:12px;
+        ">
+          <div style="font-size:32px;margin-bottom:8px;">🚫</div>
+          <p style="color:#dc2626;font-size:14px;font-weight:600;margin:0 0 4px;">
+            ไม่ได้รับอนุญาตให้ใช้กล้อง
+          </p>
+          <p style="color:#64748b;font-size:12px;margin:0;">
+            กรุณาอนุญาตการใช้กล้องใน Browser แล้วลองใหม่
+          </p>
+        </div>
+
+        <!-- ปุ่มลองใหม่ -->
+        <button class="btn btn-primary"
+                style="max-width:280px;margin:0 auto 10px;"
+                onclick="retryCameraPermission()">
+          <i class="fa-solid fa-rotate-right"></i>
+          &nbsp;ลองใหม่อีกครั้ง
+        </button>
+
+        <!-- วิธีแก้ง่ายๆ -->
+        <div style="
+          background:#f8fafc;
+          border-radius:12px;
+          padding:14px;
+          text-align:left;
+          font-size:12px;
+          color:#475569;
+          line-height:1.8;
+        ">
+          <b style="color:#0369a1;">📱 วิธีอนุญาตกล้อง:</b><br>
+          <b>Android:</b> กดไอคอน 🔒 ข้าง URL → กล้อง → อนุญาต<br>
+          <b>iPhone:</b> Settings → Safari → กล้อง → อนุญาต<br><br>
+          <span style="color:#dc2626;">แล้วกด "ลองใหม่อีกครั้ง"</span>
+        </div>
+      </div>
     </div>
 
     <!-- ===== กล้อง (ซ่อนก่อน) ===== -->
