@@ -449,6 +449,21 @@ function startQRScan() {
   if (errMsg)  errMsg.style.display  = "none";
 }
 
+function retryCameraPermission() {
+  // Reset error message และปุ่ม
+  const errMsg   = document.getElementById("camera-error-msg");
+  const allowBtn = document.getElementById("allow-camera-btn");
+
+  if (errMsg)   errMsg.style.display  = "none";
+  if (allowBtn) {
+    allowBtn.disabled = false;
+    allowBtn.innerHTML = '<i class="fa-solid fa-camera"></i>&nbsp;อนุญาตและเริ่มสแกน';
+  }
+
+  // เรียกขออนุญาตใหม่
+  requestCameraPermission();
+}
+
 async function requestCameraPermission() {
   const permBox  = document.getElementById("camera-permission-box");
   const camBox   = document.getElementById("camera-view-box");
