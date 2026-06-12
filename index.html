@@ -466,17 +466,62 @@
   <div class="content">
     <h2 style="margin-bottom:16px;">สแกนคิวอาร์โค้ด</h2>
 
-    <video id="qr-video"
-           style="width:100%;border-radius:12px;background:#000;">
-    </video>
+    <!-- ===== หน้าขออนุญาตกล้อง ===== -->
+    <div id="camera-permission-box" style="
+      text-align:center;
+      padding:32px 20px;
+      background:#f0f9ff;
+      border-radius:20px;
+      border:2px dashed #00a2ff;
+      margin-bottom:16px;
+    ">
+      <div style="font-size:56px;margin-bottom:16px;">📷</div>
+      <h3 style="color:#0369a1;margin:0 0 8px;font-size:18px;font-weight:700;">
+        ขออนุญาตใช้กล้อง
+      </h3>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px;line-height:1.6;">
+        แอปต้องการเข้าถึงกล้องเพื่อสแกน QR Code<br>
+        กรุณากด <b>"อนุญาต"</b> เมื่อ Browser ถามสิทธิ์
+      </p>
 
-    <p id="scan-status"
-       style="text-align:center;margin-top:12px;color:#64748b;">
-       กรุณานำกล้องไปยังคิวอาร์โค้ด...
-    </p>
+      <button id="allow-camera-btn" class="btn btn-primary"
+              style="max-width:280px;margin:0 auto;"
+              onclick="requestCameraPermission()">
+        <i class="fa-solid fa-camera"></i>
+        &nbsp;อนุญาตและเริ่มสแกน
+      </button>
 
-    <button id="stop-scan-btn" class="btn btn-secondary" onclick="stopQRScan(); navigateToScreen('home')"
-            style="margin-top:16px;">ยกเลิก</button>
+      <p id="camera-error-msg" style="
+        display:none;
+        margin-top:16px;
+        color:#dc2626;
+        font-size:13px;
+        background:#fef2f2;
+        padding:10px 14px;
+        border-radius:10px;
+      ">
+        ❌ ไม่สามารถเข้าถึงกล้องได้<br>
+        กรุณาไปที่ <b>การตั้งค่า Browser → อนุญาตกล้อง</b> แล้วลองใหม่
+      </p>
+    </div>
+
+    <!-- ===== กล้อง (ซ่อนก่อน) ===== -->
+    <div id="camera-view-box" style="display:none;">
+      <video id="qr-video"
+             style="width:100%;border-radius:12px;background:#000;">
+      </video>
+
+      <p id="scan-status"
+         style="text-align:center;margin-top:12px;color:#64748b;">
+         กรุณานำกล้องไปยังคิวอาร์โค้ด...
+      </p>
+    </div>
+
+    <button id="stop-scan-btn" class="btn btn-secondary"
+            onclick="stopQRScan(); navigateToScreen('home')"
+            style="margin-top:16px;">
+      <i class="fa-solid fa-xmark"></i>&nbsp;ยกเลิก
+    </button>
 
   </div>
 </div>
@@ -573,20 +618,19 @@
       <div class="info-grid" style="margin-bottom:18px;">
         <div class="info-row">
           <span class="info-label">ชื่อ</span>
-          <span class="info-value">Sumate Dakaew</span>
+          <span class="info-value">Khem Jira</span>
         </div>
 
         <div class="info-row">
           <span class="info-label">ตำแหน่ง</span>
-          <span class="info-value">IT Support</span>
+          <span class="info-value">Planning and Data Analysis</span>
         </div>
 
         <div class="info-row">
           <span class="info-label">Email</span>
-          <span class="info-value">it.support@crcsteel.co.th</span>
+          <span class="info-value">planning@crcsteel.co.th</span>
         </div>
       </div>
-
 
       <!-- Manager Header -->
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
